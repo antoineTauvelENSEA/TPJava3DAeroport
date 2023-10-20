@@ -20,8 +20,6 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 public class Interface extends Application {
-
-    ArrayList<Flight> listOfFlight = new ArrayList<Flight>();
     Translate tz = new Translate();
     private double mousePosX;
     private double mousePosY;
@@ -29,6 +27,7 @@ public class Interface extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         World w = new World("./data/airport-codes_no_comma.csv");
+        ArrayList<Flight> listOfFlight = new ArrayList<Flight>();
 
         primaryStage.setTitle("So world");
 
@@ -65,22 +64,8 @@ public class Interface extends Application {
                     System.out.println("x="+longitude+" y ="+latitude);
                     System.out.println(a);
 
-                   try {
-                        HttpClient client = HttpClient.newHttpClient();
-
-                        HttpRequest request = HttpRequest.newBuilder()
-                                .uri(URI.create("http://api.aviationstack.com/v1/flights?access_key=cfaf27d3b7c76c08bafee49ddb0df72c&arr_iata=" + a.getIATA()))
-                                .build();
-                        HttpResponse response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                        JsonFlightFillerOracle json = new JsonFlightFillerOracle(response.body().toString(),w);
-                        listOfFlight = json.getList();
-                        json.displayFlight();
-                        earth.displayYellowSphere(listOfFlight);
-
-                    }
-                    catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    ThreadScrapOnlineFlight tsolf = new ThreadScrapOnlineFlight(earth,a,w,listOfFlight);
+                    tsolf.start();
                 }
             }
         });

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
 
-public class JsonFlightFillerOracle {
+public class JsonFlightFillerOracle{
     public ArrayList<Flight> getList() {
         return list;
     }

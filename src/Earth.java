@@ -23,6 +23,17 @@ public class Earth extends Group {
     }
 
     private Sphere sph;
+    private Sphere redSphere;
+    private Boolean needUpdate=false;
+    private ArrayList<Flight> flightList = new ArrayList<>();
+
+    public void setNeedUpdate(Boolean needUpdate) {
+        this.needUpdate = needUpdate;
+    }
+
+    public ArrayList<Flight> getFlightList() {
+        return flightList;
+    }
 
     public Earth() {
         yellowSphere = new ArrayList<Sphere>();
@@ -39,6 +50,10 @@ public class Earth extends Group {
             public void handle(long l) {
                 ry.setAxis(new Point3D(0,1,0));
                 ry.setAngle(l/50000000);
+                if(needUpdate){
+                    needUpdate=false;
+                    displayYellowSphere(flightList);
+                }
             }
         };
         animationTimer.start();
@@ -49,16 +64,12 @@ public class Earth extends Group {
         col.setSpecularColor(color);
         col.setDiffuseColor(color);
 
-        double latitude=Math.toRadians(a.getLatitude()-13);
-        double longitude=Math.toRadians(a.getLongitude());
-
-        Sphere coloredSphere = new Sphere(2);
+        Sphere coloredSphere = new Sphere(5);
         coloredSphere.setMaterial(col);
-     //   Translate tz= new Translate(300.*Math.cos(latitude)*Math.sin(longitude),-300*Math.sin(latitude),-300*Math.cos(latitude)*Math.cos(longitude));
-        Translate tz = new Translate(0,0,-300);
+        Translate tz = new Translate(0,0,-sph.getRadius());
         coloredSphere.getTransforms().add(tz);
-        Rotate rTheta = new Rotate (40,0,0,300,Rotate.X_AXIS);
-        Rotate rPhi = new Rotate (73,0,0,300,Rotate.Y_AXIS);
+        Rotate rTheta = new Rotate (-a.getLatitude()*(60.0/90.0),0,0,sph.getRadius(),Rotate.X_AXIS);
+        Rotate rPhi = new Rotate (-a.getLongitude(),0,0,sph.getRadius(),Rotate.Y_AXIS);
         coloredSphere.getTransforms().add(rTheta);
         coloredSphere.getTransforms().add(rPhi);
 
@@ -66,7 +77,8 @@ public class Earth extends Group {
     }
 
     public void displayRedSphere(Aeroport a){
-        this.getChildren().add(createSphere(a,Color.RED));
+        redSphere=createSphere(a,Color.RED);
+      this.getChildren().add(redSphere);
     }
 
     public void displayYellowSphere(ArrayList<Flight> list){
@@ -74,6 +86,10 @@ public class Earth extends Group {
         yellow.setSpecularColor(Color.YELLOW);
         yellow.setDiffuseColor(Color.YELLOW);
         yellowSphere.clear();
+    //    this.getChildren().clear();
+    //    this.getChildren().add(sph);
+    //    this.getChildren().add(redSphere);
+
         for (Flight f : list){
             if (f.getDeparture()!=null)
             {

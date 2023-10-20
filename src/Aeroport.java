@@ -13,7 +13,7 @@ public class Aeroport {
         return IATA;
     }
 
-    @Override
+   @Override
     public String toString() {
         return "Aeroport{" +
                 "Name='" + Name + '\'' +
@@ -29,10 +29,15 @@ public class Aeroport {
     }
 
     public Aeroport (String n, String code, double lat, double lon, String country){
-        Name=n;
-        IATA=code;
-        latitude=lat;
-        longitude=lon;
-        country=country;
+        this.Name=n;
+        this.IATA=code;
+        this.latitude=lat;
+        this.longitude=lon;
+        this.country=country;
+    }
+
+    public static void main (String args[]){
+        Aeroport a1 = new Aeroport("Cergy","CY",45,3,"FRANCE");
+        System.out.println(a1);
     }
 }
