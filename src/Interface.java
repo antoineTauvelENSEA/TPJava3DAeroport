@@ -58,9 +58,11 @@ public class Interface extends Application {
                 if (pickResult.getIntersectedNode() != null) {
                     Point2D click=pickResult.getIntersectedTexCoord();
                     double longitude=360*(click.getX()-0.5);
-                    double latitude=2*Math.toDegrees(Math.atan(Math.exp((0.5-click.getY())/0.2678))-(Math.PI/4));
+                    //double latitude=2*Math.toDegrees(Math.atan(Math.exp((0.5-click.getY())/0.2678))-(Math.PI/4));
+                    double latitude=180*(0.5-click.getY());
                     Aeroport a = w.findNearestAirport(longitude,latitude);
                     earth.displayRedSphere(a);
+                    //earth.displayBlueSphere(); // Test d'affichage
                     System.out.println("x="+longitude+" y ="+latitude);
                     System.out.println(a);
 

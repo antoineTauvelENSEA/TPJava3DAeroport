@@ -60,18 +60,28 @@ public class Earth extends Group {
     }
 
     public Sphere createSphere(Aeroport a,Color color){
+        return createSphere(a.getLatitude(),a.getLongitude(),color);
+    }
+
+    public Sphere createSphere(double latitude, double longitude,Color color){
         PhongMaterial col = new PhongMaterial();
         col.setSpecularColor(color);
         col.setDiffuseColor(color);
 
         Sphere coloredSphere = new Sphere(5);
         coloredSphere.setMaterial(col);
-        Translate tz = new Translate(0,0,-sph.getRadius());
-        coloredSphere.getTransforms().add(tz);
-        Rotate rTheta = new Rotate (-a.getLatitude()*(60.0/90.0),0,0,sph.getRadius(),Rotate.X_AXIS);
-        Rotate rPhi = new Rotate (-a.getLongitude(),0,0,sph.getRadius(),Rotate.Y_AXIS);
-        coloredSphere.getTransforms().add(rTheta);
+
+        coloredSphere.setTranslateZ(-sph.getRadius());
+
+        Rotate rPhi = new Rotate (-longitude,
+                -coloredSphere.getTranslateX(),-coloredSphere.getTranslateY(),
+                -coloredSphere.getTranslateZ(),Rotate.Y_AXIS);
+
         coloredSphere.getTransforms().add(rPhi);
+        Rotate rTheta = new Rotate (-latitude*60.0/90.0,
+                -coloredSphere.getTranslateX(),-coloredSphere.getTranslateY(),
+                -coloredSphere.getTranslateZ(),Rotate.X_AXIS);
+        coloredSphere.getTransforms().add(rTheta);
 
         return coloredSphere;
     }
@@ -82,18 +92,23 @@ public class Earth extends Group {
     }
 
     public void displayYellowSphere(ArrayList<Flight> list){
-        PhongMaterial yellow = new PhongMaterial();
-        yellow.setSpecularColor(Color.YELLOW);
-        yellow.setDiffuseColor(Color.YELLOW);
         yellowSphere.clear();
-    //    this.getChildren().clear();
-    //    this.getChildren().add(sph);
-    //    this.getChildren().add(redSphere);
 
         for (Flight f : list){
             if (f.getDeparture()!=null)
             {
                 Sphere current = createSphere(f.getDeparture(),Color.YELLOW);
+                this.getChildren().add(current);
+            }
+        }
+    }
+
+    public void displayBlueSphere(){
+        yellowSphere.clear();
+
+        for (int latitude=-90;latitude<90; latitude+=20){
+            for (int longitude=-180;longitude<180;longitude+=20) {
+                Sphere current = createSphere(latitude, longitude, Color.BLUE);
                 this.getChildren().add(current);
             }
         }
