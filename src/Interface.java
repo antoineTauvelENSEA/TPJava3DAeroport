@@ -67,7 +67,7 @@ public class Interface extends Application {
                     System.out.println(a);
 
                     ThreadScrapOnlineFlight tsolf = new ThreadScrapOnlineFlight(earth,a,w,listOfFlight);
-                    tsolf.start();
+                    tsolf.start();        // Change to start();
                 }
             }
         });

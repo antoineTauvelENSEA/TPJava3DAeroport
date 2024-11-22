@@ -65,6 +65,7 @@ public class JsonFlightFillerOracle{
             BufferedReader br = new BufferedReader(new FileReader("data/JsonOrly.txt"));
             String test = br.readLine();
             JsonFlightFillerOracle jSonFlightFiller = new JsonFlightFillerOracle(test,w);
+            br.close();
         }
         catch (Exception e){
             e.printStackTrace();
